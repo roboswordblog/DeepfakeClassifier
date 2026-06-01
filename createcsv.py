@@ -1,12 +1,12 @@
 import pandas as pd
 from pathlib import Path
-
-base = Path("dataset")
+# https://www.kaggle.com/datasets/manjilkarki/deepfake-and-real-images?resource=download for the data
+base = Path("Dataset")
 
 rows = []
 
-for split in ["train", "val", "test"]:
-    for label, y in [("real", 0), ("fake", 1)]:
+for split in ["Train", "Validation", "Test"]:
+    for label, y in [("Real", 0), ("Fake", 1)]:
         folder = base / split / label
 
         for img in folder.iterdir():
