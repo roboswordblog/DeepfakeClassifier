@@ -1,26 +1,24 @@
 import pandas as pd
 from pathlib import Path
 
-dataset_dir = Path("dataset")
+base = Path("dataset")
 
 rows = []
 
-for img_path in (dataset_dir / "real").glob("*"):
-    if img_path.is_file():
-        rows.append({
-            "x": str(img_path),
-            "y": 0
-        })
+for split in ["train", "val", "test"]:
+    for label, y in [("real", 0), ("fake", 1)]:
+        folder = base / split / label
 
-for img_path in (dataset_dir / "fake").glob("*"):
-    if img_path.is_file():
-        rows.append({
-            "x": str(img_path),
-            "y": 1
-        })
+        for img in folder.iterdir():
+            if img.is_file():
+                rows.append({
+                    "x": str(img),
+                    "y": y,
+                    "split": split
+                })
 
 df = pd.DataFrame(rows)
 
-df = df.sample(frac=1, random_state=42).reset_index(drop=True)
+df = df.sample(frac=1).reset_index(drop=True)
 
-df.to_csv("deepfake_dataset.csv", index=False)
+df.to_csv("dataset.csv", index=False)
